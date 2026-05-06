@@ -1,0 +1,1 @@
+web: daphne -b 0.0.0.0 -p $PORT p_transportation_p.asgi:application
