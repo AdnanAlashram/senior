@@ -7,7 +7,6 @@ from PTP.views import (
     PassengerProfileView,
 )
 
-
 urlpatterns = [
     path('passenger/profile', PassengerProfileView.as_view(), name='passenger-profile'),
     path('passenger/deactivate', PassengerDeactivateView.as_view(), name='passenger-deactivate'),
@@ -15,9 +14,6 @@ urlpatterns = [
     path('driver/deactivation-request', DriverDeactivateRequestView.as_view(), name='driver-deactivation-request'),
 ]
 
-from PTP.views.expo_push_token_views import SaveExpoPushTokenView
-from django.urls import path
-
-urlpatterns += [
-    path('expo/token/', SaveExpoPushTokenView.as_view(), name='save-expo-token'),
-]
+# urlpatterns += [
+#     path('expo/token/', SaveExpoPushTokenView.as_view(), name='save-expo-token'),
+# ]

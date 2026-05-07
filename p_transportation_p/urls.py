@@ -13,6 +13,7 @@ urlpatterns = [
     path('api/admin/', include('PTP.urls.admin_route_urls')),
     path('api/admin/', include('PTP.urls.admin_stop_urls')),
     path('api/admin/', include('PTP.urls.admin_vehicle_urls')),
+    path('api/notifications/', include('PTP.urls.notification_urls')),
 ]
 
 if settings.DEBUG:

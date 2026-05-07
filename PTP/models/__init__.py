@@ -3,6 +3,8 @@ from .driver import Driver
 from .favorite_trip import FavoriteTrip
 from .driver_token import DriverToken
 from .driver_trip import DriverTrip
+from .expo_push_token import ExpoPushToken
+from .notification import Notification          # ← was missing from __all__
 from .route import Route
 from .route_stop import RouteStop
 from .stop import Stop
@@ -10,13 +12,15 @@ from .user import User
 from .user_manager import UserManager
 from .vehicle import Vehicle
 from .vehicle_location import VehicleLocation
-from .expo_push_token import ExpoPushToken
+ 
 __all__ = [
     'Complaint',
     'Driver',
-    'FavoriteTrip',
     'DriverToken',
     'DriverTrip',
+    'ExpoPushToken',
+    'FavoriteTrip',
+    'Notification',
     'Route',
     'RouteStop',
     'Stop',
@@ -24,6 +28,4 @@ __all__ = [
     'UserManager',
     'Vehicle',
     'VehicleLocation',
-    'ExpoPushToken',
 ]
-

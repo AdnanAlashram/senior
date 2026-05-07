@@ -9,6 +9,7 @@ class UserRegistrationSerializer(serializers.Serializer):
     phone = serializers.CharField(max_length=50)
     password = serializers.CharField(write_only=True, min_length=8)
     account_type = serializers.ChoiceField(choices=['passenger', 'driver'])
+    expo_push_token = serializers.CharField(required=False, allow_blank=True)
     id_card_image_1 = serializers.FileField(write_only=True, required=False)
     id_card_image_2 = serializers.FileField(write_only=True, required=False)
     license_image = serializers.FileField(write_only=True, required=False)
