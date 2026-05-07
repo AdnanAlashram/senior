@@ -105,7 +105,7 @@ class AdminDriverApprovalView(APIView):
             # 🔔 Notify driver — DB record saved + Expo push fired
             NotificationService.send_driver_notification(
                 driver_id=driver.driver_id,
-                title="Account Approved 🎉",
+                title="Account Approved ",
                 body="Your driver account has been approved. You can now login.",
             )
  
@@ -125,7 +125,7 @@ class AdminDriverApprovalView(APIView):
         # 🔔 Notify driver — DB record saved + Expo push fired
         NotificationService.send_driver_notification(
             driver_id=driver.driver_id,
-            title="Account Rejected ❌",
+            title="Account Rejected ",
             body="Your driver registration request has been rejected.",
         )
  

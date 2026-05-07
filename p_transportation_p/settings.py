@@ -80,10 +80,19 @@ TEMPLATES = [
     },
 ]
 
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default=os.environ.get('DATABASE_URL'),
+#         conn_max_age=600,
+#     )
+# }
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
         conn_max_age=600,
+        engine_options={
+            "charset": "utf8mb4",
+        },
     )
 }
 
