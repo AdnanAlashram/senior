@@ -94,26 +94,20 @@ DATABASES = {
 #         },
 #     )
 # }
-
-# --- تصليح الـ Redis هنا ---
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')
 
-# معالجة الرابط لإضافة SSL certificate skip إذا كان الاتصال بـ Railway يطلب ذلك
-if REDIS_URL.startswith('rediss://'):
-    # في حال كان الرابط يستخدم SSL (rediss)، نقوم بإضافة معامل لإيقاف فحص الشهادة (مطلوب لبعض استضافات Redis)
-    REDIS_HOST = f"{REDIS_URL}?ssl_cert_reqs=none"
-else:
-    REDIS_HOST = REDIS_URL
-
+# إذا كان الرابط داخلي من Railway، نضمن استخدامه بشكل مباشر
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_HOST],
+            "hosts": [REDIS_URL],
+            # أضفنا هاد الخيار لضمان عدم حدوث مهلة (Timeout) بالاتصال الداخلي
+            "capacity": 1500,  
+            "expiry": 60,
         },
     },
 }
-
 AUTH_USER_MODEL = 'PTP.User'
 
 LANGUAGE_CODE = 'ar-sy'
