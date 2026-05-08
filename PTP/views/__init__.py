@@ -1,5 +1,6 @@
 from .admin_views import (
     AdminAccountStatusView,
+    AdminStatisticsView,
     AdminAccountUpdateView,
     AdminAccountsView,
     AdminComplaintsView,
@@ -41,6 +42,7 @@ from .expo_push_token_views import SaveExpoPushTokenView
 
 __all__ = [
     'AdminAccountStatusView',
+    'AdminStatisticsView',
     'AdminAccountUpdateView',
     'AdminAccountsView',
     'AdminComplaintsView',
