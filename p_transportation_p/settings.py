@@ -96,15 +96,25 @@ DATABASES = {
 #     )
 # }
 
+# CHANNEL_LAYERS = {
+#     "default": {
+#         "BACKEND": "channels_redis.core.RedisChannelLayer",
+#         "CONFIG": {
+#             "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+#         },
+#     },
+# }
+REDIS_URL = os.environ.get('REDIS_URL')
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
+            # إذا REDIS_URL موجود استخدمه، وإلا استخدم المحلي
+            "hosts": [REDIS_URL if REDIS_URL else "redis://127.0.0.1:6379"],
         },
     },
 }
-
 AUTH_USER_MODEL = 'PTP.User'
 
 LANGUAGE_CODE = 'ar-sy'
