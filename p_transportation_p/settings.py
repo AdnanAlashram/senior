@@ -1,4 +1,3 @@
-
 import os
 from pathlib import Path
 import dj_database_url
@@ -73,8 +72,8 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.auth',
+                'django.template.context_processors.messages',
             ],
         },
     },
@@ -96,25 +95,25 @@ DATABASES = {
 #     )
 # }
 
-# CHANNEL_LAYERS = {
-#     "default": {
-#         "BACKEND": "channels_redis.core.RedisChannelLayer",
-#         "CONFIG": {
-#             "hosts": [os.environ.get('REDIS_URL', 'redis://localhost:6379')],
-#         },
-#     },
-# }
-REDIS_URL = os.environ.get('REDIS_URL')
+# --- تصليح الـ Redis هنا ---
+REDIS_URL = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')
+
+# معالجة الرابط لإضافة SSL certificate skip إذا كان الاتصال بـ Railway يطلب ذلك
+if REDIS_URL.startswith('rediss://'):
+    # في حال كان الرابط يستخدم SSL (rediss)، نقوم بإضافة معامل لإيقاف فحص الشهادة (مطلوب لبعض استضافات Redis)
+    REDIS_HOST = f"{REDIS_URL}?ssl_cert_reqs=none"
+else:
+    REDIS_HOST = REDIS_URL
 
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            # إذا REDIS_URL موجود استخدمه، وإلا استخدم المحلي
-            "hosts": [REDIS_URL if REDIS_URL else "redis://127.0.0.1:6379"],
+            "hosts": [REDIS_HOST],
         },
     },
 }
+
 AUTH_USER_MODEL = 'PTP.User'
 
 LANGUAGE_CODE = 'ar-sy'
@@ -139,7 +138,6 @@ DAMASCUS_ROUTE_BOUNDS = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 # import os
 # from pathlib import Path
