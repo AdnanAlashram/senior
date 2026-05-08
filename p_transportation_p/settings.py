@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
 import dj_database_url
-from corsheaders.defaults import default_headers # إضافة استيراد الترويسات الافتراضية
+from corsheaders.defaults import default_headers
 
 # المسارات الأساسية
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +28,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',  # وضعناها في الأعلى تماماً
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -38,11 +38,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-# --- إعدادات CORS و CSRF المحدثة ---
+# --- إعدادات CORS و CSRF ---
 CORS_ALLOW_ALL_ORIGINS = True 
 CORS_ALLOW_CREDENTIALS = True
 
-# السماح للترويسات التي يستخدمها Vite و Axios عادةً
 CORS_ALLOW_HEADERS = list(default_headers) + [
     "accept",
     "authorization",
@@ -52,17 +51,16 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     "x-requested-with",
 ]
 
-# ضروري جداً لنجاح طلبات الـ POST من رابط Vite أو Railway
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:5173",
-    "https://web-production-d9b56.up.railway.app", # رابط الـ Railway الخاص بك
+    "https://web-production-d9b56.up.railway.app",
 ]
-# --------------------------------
 
 ROOT_URLCONF = 'p_transportation_p.urls'
 ASGI_APPLICATION = 'p_transportation_p.asgi.application'
 WSGI_APPLICATION = 'p_transportation_p.wsgi.application'
 
+# --- تصليح الـ TEMPLATES (حل أخطاء الـ SystemCheckError) ---
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -72,46 +70,43 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.template.context_processors.auth',
-                'django.template.context_processors.messages',
+                'django.contrib.auth.context_processors.auth',      # ضروري للأدمن
+                'django.contrib.messages.context_processors.messages', # ضروري للأدمن
             ],
         },
     },
 ]
 
+# --- إعدادات قاعدة البيانات ---
 DATABASES = {
     'default': dj_database_url.config(
         default=os.environ.get('DATABASE_URL'),
         conn_max_age=600,
     )
 }
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default=os.environ.get('DATABASE_URL'),
-#         conn_max_age=600,
-#         engine_options={
-#             "charset": "utf8mb4",
-#         },
-#     )
-# }
+
+# --- تصليح الـ Redis و CHANNEL_LAYERS ---
 REDIS_URL = os.environ.get('REDIS_URL', 'redis://127.0.0.1:6379')
 
-# إذا كان الرابط داخلي من Railway، نضمن استخدامه بشكل مباشر
+# معالجة SSL لروابط Redis السحابية (Railway)
+if REDIS_URL.startswith('rediss://'):
+    REDIS_HOSTS = [f"{REDIS_URL}?ssl_cert_reqs=none"]
+else:
+    REDIS_HOSTS = [REDIS_URL]
+
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [REDIS_URL],
-            # أضفنا هاد الخيار لضمان عدم حدوث مهلة (Timeout) بالاتصال الداخلي
-            "capacity": 1500,  
-            "expiry": 60,
+            "hosts": REDIS_HOSTS,
         },
     },
 }
+
 AUTH_USER_MODEL = 'PTP.User'
 
 LANGUAGE_CODE = 'ar-sy'
-TIME_ZONE = 'Asia/Damascus' # متوافق مع توقيت دمشق الحالي
+TIME_ZONE = 'Asia/Damascus'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
@@ -132,7 +127,6 @@ DAMASCUS_ROUTE_BOUNDS = {
 }
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 # import os
 # from pathlib import Path
 
